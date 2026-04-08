@@ -1,0 +1,101 @@
+body {
+background-image: url("https://lh6.googleusercontent.com/proxy/FYK7oVNIDDoHjeNHOkZbJfewpSQ8Zrcm1WSyIAEJgDg3YwBKWbcIFC0A0KnBH6htHQ");
+background-image:cover;
+background-repeat:no-repeat;
+background-size:cover;
+}
+ 
+.title {
+ font-size: 70px;
+ margin-top: 50px;
+ color:white;
+ text-align:center;
+text-shadow: 2px 2px 5px red;
+  text-decoration-style: double;
+}
+
+.small-text{
+    font-size:44px;
+    color:white;
+    text-align:center;
+}
+.manga{
+  display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 20px; /* spacing between items */
+    width: 90%;
+    margin: auto;
+    padding: 20px
+}
+nav ul{
+     position:fixed;
+     top:15px;     
+     list-style:none;
+     margin-left:800px;
+     padding-bottom:50px;
+     display: flex;
+     gap:15px;
+ }
+
+nav a{
+     text-decoration: none;
+     color:white;
+     font-weight: bold;
+ }
+
+nav{
+     margin-left:20px;
+ }
+
+nav a {
+ background: #334155;
+ color: white;
+ padding: 10px 22px;
+ border-radius: 6px;
+ text-decoration: none;
+ cursor: pointer;
+ transition: 0.25s ease;
+ width:;
+}
+
+
+nav a:hover {
+ background: #475569;
+ transform: translateY(-3px);
+ box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.anime{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 20px; /* spacing between items */
+    width: 90%;
+    margin: auto;
+    padding: 20px;
+}
+
+.anime a {
+    display: block;
+    background: #222;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.anime a:hover {
+    background: #444;
+    transform: scale(1.05);
+}
+.games a:hover {
+    background: #444;
+    transform: scale(1.05);
+}
+.catalog-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    width: 80%;
+    margin-top: 40px;
+}
