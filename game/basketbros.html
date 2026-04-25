@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Game</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="/launch/blob-proxy.js"></script>
+  <style>
+    body { margin:0; 
+    background:#111; 
+    color:#fff; 
+    padding:20px; }
+    .row { display:flex; 
+        gap:15px; 
+    }
+    iframe { flex:1; 
+        height:600px; 
+        border:0; 
+        border-radius:10px; 
+        background:#000; 
+        display:block; }
+    .sidebar { width:80px; 
+        background:linear-gradient(180deg,#1a1a2e,#16213e,#0f3460);
+      border-radius:10px; 
+      padding:15px 0; 
+      display:flex; 
+      flex-direction:column; 
+      align-items:center; 
+      gap:15px;
+      box-shadow:0 0 20px rgba(0,200,255,0.3); 
+    }
+    .sidebar a, .sidebar button { b
+        background:transparent; 
+        border:0; 
+        color:#fff; 
+        font-size:32px; 
+        cursor:pointer;
+      padding:8px; 
+      border-radius:10px; 
+      transition:all .2s; 
+      text-decoration:none; 
+    }
+    .sidebar a:hover, .sidebar button:hover { 
+        background:rgba(255,255,255,0.15); 
+        transform:scale(1.2); 
+    }
+    .btn { 
+        display:inline-block; 
+        margin:0 5px 10px 0; 
+        padding:10px 18px; 
+        background:#444; 
+        color:#fff; border:0; 
+        border-radius:8px; 
+        cursor:pointer; 
+        font-size:16px; 
+        text-decoration:none; 
+    }
+    .btn:hover { 
+        background:#666; }
+
+
+    /* Fullscreen mode */
+    body.fs { 
+        overflow:hidden; 
+    }
+    body.fs .wrap { 
+        padding:0; 
+    }
+    body.fs .top-controls, body.fs .sidebar { 
+        display:none; 
+    }
+    body.fs iframe {
+         width:100vw; 
+         height:calc(100vh - 70px); 
+         border-radius:0; 
+        }
+
+    /* Cool bottom bar (only in fullscreen) */
+    .fsbar {
+         display:none; 
+         position:fixed; 
+         bottom:0; 
+         left:0; 
+         width:100%; 
+         height:70px;
+      background:linear-gradient(90deg,#1a1a2e,#16213e,#0f3460);
+      box-shadow:0 -4px 20px rgba(0,200,255,0.3);
+      justify-content:space-around; 
+      align-items:center; 
+      z-index:9999;
+     }
+    body.fs .fsbar {
+         display:flex; 
+        }
+    .fsbar a, .fsbar button { 
+        background:transparent; 
+        border:0; 
+        color:#fff;
+        font-size:32px; 
+        cursor:pointer;
+      padding:8px 16px;
+       border-radius:10px; 
+       transition:all .2s; 
+       text-decoration:none; 
+    }
+    .fsbar a:hover, .fsbar button:hover { 
+        background:rgba(255,255,255,0.15); 
+        transform:scale(1.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top-controls">
+      <a class="btn" href="/game.html">← Back</a>
+      <button class="btn" onclick="goFs()">⛶ Full Screen</button>
+    </div>
+    <div class="row">
+      <iframe src="CHANGE_ME"></iframe>
+      <div class="sidebar">
+        <a href="/" title="Home">🏠</a>
+        <a href="/game.html" title="Games">🎮</a>
+        <a href="/anime.html" title="Anime">🌸</a>
+        <a href="/manga.html" title="Manga">📚</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="fsbar">
+    <a href="/" title="Home">🏠</a>
+    <a href="/game.html" title="Games">🎮</a>
+    <a href="/anime.html" title="Anime">🌸</a>
+    <a href="/manga.html" title="Manga">📚</a>
+    <button onclick="exitFs()" title="Exit">❌</button>
+  </div>
+
+  <script>
+    function goFs() { document.body.classList.add("fs"); }
+    function exitFs() { document.body.classList.remove("fs"); }
+  </script>
+</body>
+</html>

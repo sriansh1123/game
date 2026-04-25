@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Proxy</title>
+  <script src="/launch/blob-proxy.js"></script>
+  <script src="/uv/uv.bundle.js"></script>
+  <script src="/uv/uv.config.js"></script>
+  <style>
+    body { margin:0; background:#111; color:#fff; font-family:sans-serif; padding:20px; }
+    #url { padding:10px; width:60%; border-radius:6px; border:0; font-size:16px; }
+    #go { padding:10px 20px; background:#0af; color:#fff; border:0; border-radius:6px; cursor:pointer; font-size:16px; }
+    #status { margin-top:10px; color:#aaa; }
+    #frame { width:100%; height:75vh; border:0; border-radius:10px; background:#000; margin-top:15px; }
+  </style>
+</head>
+<body>
+  <input id="url" placeholder="Enter URL (now.gg, example.com)">
+  <button id="go">Go</button>
+  <div id="status">Starting proxy...</div>
+  <iframe id="frame"></iframe>
+
+  <script>
+    const status = document.getElementById("status");
+    let ready = false;
+
+    async function startSW() {
+      try {
+        await navigator.serviceWorker.register("/uv/sw.js", { scope: __uv$config.prefix });
+        await navigator.serviceWorker.ready;
+        ready = true;
+        status.textContent = "Proxy ready ✓";
+      } catch (e) {
+        status.textContent = "Proxy failed: " + e.message;
+      }
+    }
+
+    document.getElementById("go").onclick = () => {
+      if (!ready) { status.textContent = "Wait, proxy still loading..."; return; }
+      let url = document.getElementById("url").value.trim();
+      if (!url) return;
+      if (!/^https?:\/\//.test(url)) url = "https://" + url;
+      document.getElementById("frame").src = __uv$config.prefix + __uv$config.encodeUrl(url);
+    };
+
+    startSW();
+  </script>
+</body>
+</html>

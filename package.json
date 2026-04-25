@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "start": "node launch/server.js"
+  },
+  "dependencies": {
+    "@titaniumnetwork-dev/ultraviolet": "^3.2.10",
+    "@tomphttp/bare-server-node": "^2.0.6",
+    "express": "^5.2.1",
+    "ultraviolet-static": "^1.0.2"
+  }
+}
