@@ -8,6 +8,17 @@ const { publicPath } = require("ultraviolet-static");
 const app = express();
 const bare = createBareServer("/bare/");
 
+app.use("/uv/", (req, res, next) => {
+  if (req.path.endsWith("sw.js")) {
+    res.setHeader("Service-Worker-Allowed", "/");
+  }
+  next();
+});
+
+app.get("/uv/sw.js", (req, res) => {
+  res.sendFile(path.join(uvPath, "sw.js"));
+});
+
 app.use(express.static(path.join(__dirname, "..")));
 app.use("/uv/", express.static(uvPath));
 app.use("/uv/", express.static(publicPath));

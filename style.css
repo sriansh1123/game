@@ -1,68 +1,114 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
 body {
-background-image: url("https://lh6.googleusercontent.com/proxy/FYK7oVNIDDoHjeNHOkZbJfewpSQ8Zrcm1WSyIAEJgDg3YwBKWbcIFC0A0KnBH6htHQ");
-background-image:cover;
-background-repeat:no-repeat;
-background-size:cover;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: url('https://media.tenor.com/6ZUs587t-_YAAAAM/blue-heart-black.gif') no-repeat center fixed;
+  color: #e6edf3;
+  background-size: cover;
+  -webkit-backface-visibility: visible;
+  overflow: hidden;
 }
- 
+
+.hidden { display: none !important; }
+
+.gear {
+  position: fixed; top: 14px; right: 18px;
+  font-size: 22px; color: #9ba3af; text-decoration: none;
+  z-index: 100; transition: 0.2s;
+}
+.gear:hover { color: #fff; transform: rotate(45deg); }
+
+.home {
+  height: 100vh; overflow-y: auto;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 80px 20px 40px;
+}
 .title {
- font-size: 70px;
- margin-top: 50px;
- color:white;
- text-align:center;
-text-shadow: 2px 2px 5px red;
-  text-decoration-style: double;
+  font-size: 72px; font-weight: 700;
+  color: #4b5563; letter-spacing: 1px;
+  margin-bottom: 30px;
+}
+.search {
+  width: 100%; max-width: 600px;
+  background: #161b22; color: #e6edf3;
+  border: 1px solid #30363d; border-radius: 8px;
+  padding: 12px 16px; font-size: 15px; outline: none;
+}
+.search:focus { border-color: #58a6ff; }
+.hint {
+  margin-top: 10px; font-size: 12px; color: #6b7280;
+}
+.hint kbd {
+  background: #21262d; border: 1px solid #30363d;
+  border-radius: 4px; padding: 1px 6px; font-size: 11px;
+  margin: 0 2px;
 }
 
-.small-text{
-    font-size:44px;
-    color:white;
-    text-align:center;
+.panel {
+  width: 100%; max-width: 720px; margin-top: 40px;
 }
-.manga{
+.panel-h {
+  font-size: 13px; color: #6b7280; margin-bottom: 12px;
+  padding-left: 4px;
+}
+.grid {
   display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns */
-    gap: 20px; /* spacing between items */
-    width: 90%;
-    margin: auto;
-    padding: 20px
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
 }
-nav ul{
-     position:fixed;
-     top:15px;     
-     list-style:none;
-     margin-left:800px;
-     padding-bottom:50px;
-     display: flex;
-     gap:15px;
- }
+.tile {
+  background: #161b22; border: 1px solid #21262d;
+  border-radius: 10px; padding: 18px 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: #e6edf3; font-size: 13px;
+  cursor: pointer; transition: 0.15s;
+}
+.tile:hover {
+  background: #1f2630; border-color: #30363d;
+  transform: translateY(-2px);
+}
+.tile img { width: 26px; height: 26px; opacity: 0.9; }
 
-nav a{
-     text-decoration: none;
-     color:white;
-     font-weight: bold;
- }
-
-nav{
-     margin-left:20px;
- }
-
-nav a {
- background: #334155;
- color: white;
- padding: 10px 22px;
- border-radius: 6px;
- text-decoration: none;
- cursor: pointer;
- transition: 0.25s ease;
- width: 100px;
+.browser {
+  position: fixed; inset: 0;
+  background: #000;
+}
+.browser iframe {
+  width: 100%; height: 100%; border: 0;
 }
 
-
-nav a:hover {
- background: #475569;
- transform: translateY(-3px);
- box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+.edge {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  height: 24px; z-index: 90;
+}
+.bar {
+  position: fixed; left: 50%; bottom: -60px;
+  transform: translateX(-50%);
+  background: #161b22; border: 1px solid #30363d;
+  border-radius: 12px 12px 0 0;
+  padding: 8px 12px;
+  display: flex; align-items: center; gap: 8px;
+  z-index: 91;
+  transition: bottom 0.25s ease;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.5);
+}
+.bar.show { bottom: 0; }
+.bar button {
+  background: #21262d; color: #e6edf3;
+  border: 1px solid #30363d; border-radius: 6px;
+  width: 34px; height: 32px;
+  cursor: pointer; font-size: 14px;
+}
+.bar button:hover { background: #30363d; }
+.urlbar {
+  background: #0d1117; color: #e6edf3;
+  border: 1px solid #30363d; border-radius: 6px;
+  padding: 6px 10px; width: 360px; font-size: 13px;
+  outline: none;
+}
+.urlbar:focus { border-color: #58a6ff; }
+.grip {
+  font-size: 11px; color: #6b7280; padding: 0 8px;
 }
 .anime{
     display: grid;

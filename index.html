@@ -1,25 +1,145 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Game Hub</title>
+<link rel="stylesheet" href="/style.css" />
+<script src="/uv/uv.bundle.js"></script>
+<script src="/uv/uv.config.js"></script>
 <script src="/launch/blob-proxy.js"></script>
 </head>
 <body>
-  <div class="title">
-    <h1>Game Hub</h1>
-  </div>
 
-  <!-- Navbar -->
-  <div class="navbar">
-    <nav>
-      <ul>
-        <li><a href="game.html">Game</a></li>
-        <li><a href="anime.html">Anime</a></li>
-        <li><a href="manga.html">Manga</a></li>
-        <li><a href="settings.html">Settings</a></li>
-          <li>a href="proxy.html">ndoi</a></li>li>
-      </ul>
-    </nav>
+<a class="gear" href="/settings.html" title="Settings">&#9881;</a>
+
+<div id="home" class="home">
+  <h1 class="title">Game Hub</h1>
+
+  <input id="search" class="search" type="text" placeholder="Search..." autocomplete="off" />
+  <div class="hint">Press <kbd>Ctrl</kbd>+<kbd>Y</kbd> to focus search</div>
+
+  <div class="panel">
+    <div class="panel-h">Quick apps</div>
+    <div class="grid">
+      <button class="tile" data-url="https://youtube.com"><img src="https://cdn.simpleicons.org/youtube/white" alt=""><span>YouTube</span></button>
+      <button class="tile" data-url="https://github.com"><img src="https://cdn.simpleicons.org/github/white" alt=""><span>GitHub</span></button>
+      <button class="tile" data-url="https://discord.com/app"><img src="https://cdn.simpleicons.org/discord/white" alt=""><span>Discord</span></button>
+      <button class="tile" data-url="https://tiktok.com"><img src="https://cdn.simpleicons.org/tiktok/white" alt=""><span>TikTok</span></button>
+      <button class="tile" data-url="https://google.com"><img src="https://cdn.simpleicons.org/google/white" alt=""><span>Google</span></button>
+      <button class="tile" data-url="https://twitter.com"><img src="https://cdn.simpleicons.org/x/white" alt=""><span>Twitter/X</span></button>
+      <button class="tile" data-url="https://roblox.com"><img src="https://cdn.simpleicons.org/roblox/white" alt=""><span>Roblox</span></button>
+      <button class="tile" data-url="https://nvidia.com/en-us/geforce-now/"><img src="https://cdn.simpleicons.org/nvidia/white" alt=""><span>GeForce</span></button>
+      <button class="tile" data-url="https://netflix.com"><img src="https://cdn.simpleicons.org/netflix/white" alt=""><span>Movies</span></button>
+      <button class="tile" data-url="https://poki.com"><img src="https://cdn.simpleicons.org/steam/white" alt=""><span>Games</span></button>
+      <button class="tile" data-url="https://chat.openai.com"><img src="https://cdn.simpleicons.org/openai/white" alt=""><span>AI</span></button>
+      <button class="tile" data-url="https://open.spotify.com"><img src="https://cdn.simpleicons.org/spotify/white" alt=""><span>Music</span></button>
+    </div>
   </div>
+</div>
+
+<div id="browser" class="browser hidden">
+  <iframe id="frame" src="about:blank"></iframe>
+</div>
+
+<div id="edge" class="edge"></div>
+
+<div id="bar" class="bar">
+  <button id="btnHome" title="Home">&#127968;</button>
+  <button id="btnBack" title="Back">&#8592;</button>
+  <button id="btnFwd"  title="Forward">&#8594;</button>
+  <button id="btnReload" title="Reload">&#8635;</button>
+  <input id="urlBar" class="urlbar" type="text" placeholder="Search or type URL" />
+  <span class="grip">^ Browser Controls</span>
+</div>
+
+<script>
+  const home    = document.getElementById("home");
+  const browser = document.getElementById("browser");
+  const frame   = document.getElementById("frame");
+  const urlBar  = document.getElementById("urlBar");
+  const search  = document.getElementById("search");
+  const bar     = document.getElementById("bar");
+  const edge    = document.getElementById("edge");
+
+  const isBlob     = location.protocol === "blob:";
+  const realOrigin = isBlob ? new URL(document.baseURI).origin : location.origin;
+  const hasUV      = typeof __uv$config !== "undefined";
+  let swReady      = isBlob;
+
+  if (hasUV && !isBlob && "serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("/uv/sw.js", { scope: __uv$config.prefix })
+      .then(() => navigator.serviceWorker.ready)
+      .then(() => { swReady = true; })
+      .catch(err => console.error("SW failed:", err));
+  }
+
+  function buildTarget(q) {
+    const isUrl = /^https?:\/\//i.test(q) || /\.[a-z]{2,}$/i.test(q);
+    if (isUrl && !/^https?:\/\//i.test(q)) q = "https://" + q;
+    return isUrl ? q : "https://duckduckgo.com/?q=" + encodeURIComponent(q);
+  }
+
+  function toProxied(url) {
+    return realOrigin + __uv$config.prefix + __uv$config.encodeUrl(url);
+  }
+
+  async function openInside(url, attempt = 0) {
+    if (!hasUV) {
+      window.open(url, "_blank");
+      alert("Proxy backend isn't running on this host.\nOpening in a new tab instead.");
+      return;
+    }
+    if (!swReady && attempt < 30) {
+      setTimeout(() => openInside(url, attempt + 1), 100);
+      return;
+    }
+    if (!swReady) {
+      window.open(url, "_blank");
+      alert("Proxy didn't start in time.\nOpening in a new tab instead.");
+      return;
+    }
+    home.classList.add("hidden");
+    browser.classList.remove("hidden");
+    frame.src = toProxied(url);
+    urlBar.value = url;
+  }
+
+  document.querySelectorAll(".tile").forEach(t => {
+    t.addEventListener("click", () => openInside(t.dataset.url));
+  });
+
+  search.addEventListener("keydown", e => {
+    if (e.key === "Enter" && search.value.trim()) {
+      openInside(buildTarget(search.value.trim()));
+    }
+  });
+
+  urlBar.addEventListener("keydown", e => {
+    if (e.key === "Enter" && urlBar.value.trim()) {
+      openInside(buildTarget(urlBar.value.trim()));
+    }
+  });
+
+  window.addEventListener("keydown", e => {
+    if (e.ctrlKey && e.key.toLowerCase() === "y") {
+      e.preventDefault();
+      search.focus();
+    }
+  });
+
+  document.getElementById("btnHome").onclick = () => {
+    browser.classList.add("hidden");
+    home.classList.remove("hidden");
+    frame.src = "about:blank";
+  };
+  document.getElementById("btnBack").onclick   = () => { try { frame.contentWindow.history.back();    } catch(e){} };
+  document.getElementById("btnFwd").onclick    = () => { try { frame.contentWindow.history.forward(); } catch(e){} };
+  document.getElementById("btnReload").onclick = () => { try { frame.contentWindow.location.reload(); } catch(e){ frame.src = frame.src; } };
+
+  edge.addEventListener("mouseenter", () => bar.classList.add("show"));
+  bar.addEventListener("mouseleave",  () => bar.classList.remove("show"));
+</script>
 </body>
 </html>
