@@ -1,33 +1,28 @@
-window.addEventListener("load", async () => {
-  if (location.protocol === "blob:") return;
-  if (window.top !== window.self) return;
-  if (localStorage.getItem("blobMode") !== "on") return;
+/* Cloaker: opens a blob: tab containing a fullscreen iframe pointing
+   back to the real Hub. The iframe is on the real origin, so UV works. */
+(function () {
+  function buildShell(target) {
+    return `<!doctype html>
+<html><head>
+<meta charset="utf-8">
+<title>about:blank</title>
+<link rel="icon" href="data:,">
+<style>html,body,iframe{margin:0;padding:0;height:100%;width:100%;border:0;background:#000;overflow:hidden}</style>
+</head><body>
+<iframe src="${target}" allow="autoplay; clipboard-read; clipboard-write; fullscreen; picture-in-picture" allowfullscreen></iframe>
+</body></html>`;
+  }
 
-  try {
-    if ("serviceWorker" in navigator && typeof __uv$config !== "undefined") {
-      await Promise.race([
-        navigator.serviceWorker
-          .register("/uv/sw.js", { scope: __uv$config.prefix })
-          .then(() => navigator.serviceWorker.ready),
-        new Promise(r => setTimeout(r, 2000))
-      ]);
+  window.openInBlob = function (target) {
+    target = target || location.href;
+    const blob = new Blob([buildShell(target)], { type: "text/html" });
+    const url  = URL.createObjectURL(blob);
+    const win  = window.open(url, "_blank");
+    if (!win) {
+      alert("Popup was blocked. Allow popups for this site to use blob mode.");
+      URL.revokeObjectURL(url);
+      return;
     }
-  } catch (e) {
-    console.error("SW pre-register failed:", e);
-  }
-
-  blobThis();
-});
-
-async function blobThis() {
-  try {
-    const r = await fetch(location.href, { credentials: "include" });
-    let html = await r.text();
-    html = html.replace(/<head[^>]*>/i,
-      m => m + '<base href="' + location.origin + '/">');
-    const blob = new Blob([html], { type: "text/html" });
-    window.location.replace(URL.createObjectURL(blob));
-  } catch (e) {
-    alert("Blob error: " + e.message);
-  }
-}
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  };
+})();

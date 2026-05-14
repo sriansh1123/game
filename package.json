@@ -2,6 +2,7 @@
   "scripts": {
     "start": "node launch/server.js"
   },
+  "type": "module",
   "dependencies": {
     "@titaniumnetwork-dev/ultraviolet": "^3.2.10",
     "@tomphttp/bare-server-node": "^2.0.6",
